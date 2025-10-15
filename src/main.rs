@@ -1,5 +1,6 @@
 mod cli;
 mod commands;
+mod utils;
 
 use anyhow::Result;
 use clap::Parser;
@@ -12,7 +13,7 @@ fn main() -> Result<()> {
     match &cli.command {
         Commands::Collect(args) => {
             commands::collect::run(args)?;
-        },
+        }
         Commands::CheckRepos(args) => {
             commands::check_repos::run(args)?;
         }

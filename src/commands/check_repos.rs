@@ -1,4 +1,5 @@
 use crate::cli::CheckReposArgs;
+use crate::utils::logger;
 use anyhow::{Context, Result};
 use colored::Colorize;
 use std::fs;
@@ -22,21 +23,19 @@ pub fn run(args: &CheckReposArgs) -> Result<()> {
     for dir in &args.directories {
         // Confirm that the path is a valid direct
         if !dir.is_dir() {
-            println!(
-                "{} a directory: {}",
-                "Warning:".yellow(),
-                dir.display()
-            );
+            logger::error(&format!("Not a directory: '{}'", dir.display()));
             continue;
         }
 
         // 2. Iterate over each directory inside the path
-        for entry in fs::read_dir(dir).with_context(|| format!("Failed to read directory {}", dir.display()))? {
+        for entry in fs::read_dir(dir)
+            .with_context(|| format!("Failed to read directory {}", dir.display()))?
+        {
             let entry = entry?;
             let path = entry.path();
 
             if path.is_dir() {
-                println!("{} {}", "🔍 Checking".cyan(), path.display());
+                logger::info(&format!("🔍 Checking {}", path.display()));
                 // 3. Get directory status
                 match check_repo_status(&path)? {
                     Some(RepoStatus::Uncommitted) => uncommitted.push(path),
@@ -44,11 +43,7 @@ pub fn run(args: &CheckReposArgs) -> Result<()> {
                     Some(RepoStatus::NotPushed) => not_pushed.push(path),
                     Some(RepoStatus::Ok) => (),
                     None => {
-                        println!(
-                            "{} {} is not a git repository",
-                            "📁 Info:".yellow(),
-                            path.display()
-                        );
+                        logger::warn(&format!("📁 Not a git repository: '{}'", path.display()));
                     }
                 }
             }
@@ -78,19 +73,36 @@ fn check_repo_status(path: &Path) -> Result<Option<RepoStatus>> {
     }
 
     // 2. Check for uncommitted changes
-    let status_output = Command::new("git").arg("-C").arg(path).arg("status").arg("--porcelain").output()?;
+    let status_output = Command::new("git")
+        .arg("-C")
+        .arg(path)
+        .arg("status")
+        .arg("--porcelain")
+        .output()?;
     if !status_output.stdout.is_empty() {
         return Ok(Some(RepoStatus::Uncommitted));
     }
 
     // 3. Check if upstream is set
-    let upstream_output = Command::new("git").arg("-C").arg(path).arg("rev-parse").arg("--abbrev-ref").arg("--symbolic-full-name").arg("@{u}").output()?;
+    let upstream_output = Command::new("git")
+        .arg("-C")
+        .arg(path)
+        .arg("rev-parse")
+        .arg("--abbrev-ref")
+        .arg("--symbolic-full-name")
+        .arg("@{u}")
+        .output()?;
     if !upstream_output.status.success() {
         return Ok(Some(RepoStatus::NoUpstream));
     }
 
     // 4. Check for unpushed commits
-    let cherry_output = Command::new("git").arg("-C").arg(path).arg("cherry").arg("-v").output()?;
+    let cherry_output = Command::new("git")
+        .arg("-C")
+        .arg(path)
+        .arg("cherry")
+        .arg("-v")
+        .output()?;
     if !cherry_output.stdout.is_empty() {
         return Ok(Some(RepoStatus::NotPushed));
     }
@@ -105,20 +117,32 @@ fn print_report(
     not_pushed: &[PathBuf],
 ) -> Result<()> {
     if !uncommitted.is_empty() {
-        println!("{}", "\n🟡 The following directories contain uncommitted changes:".yellow());
+        logger::warn("The following directories contain uncommitted changes:");
         for dir in uncommitted {
-            println!("{}", dir.display().to_string().yellow());
+            println!("{}", dir.display().to_string());
         }
     }
 
     if !no_upstream.is_empty() {
-        println!("{}", "\n🚫 The following directories do not have an upstream branch set:".red());
+        logger::warn("The following directories do not have an upstream branch set:");
         for dir in no_upstream {
-            println!("{}", dir.display().to_string().red());
-            let branch_output = Command::new("git").arg("-C").arg(dir).arg("rev-parse").arg("--abbrev-ref").arg("HEAD").output()?;
+            println!("{}", dir.display().to_string());
+            let branch_output = Command::new("git")
+                .arg("-C")
+                .arg(dir)
+                .arg("rev-parse")
+                .arg("--abbrev-ref")
+                .arg("HEAD")
+                .output()?;
             let branch = String::from_utf8(branch_output.stdout)?.trim().to_string();
-            println!("{} Remote branch 'origin/{}' exists. To link it, run:", "ℹ️".cyan(), branch);
-            println!("\t{}", format!("git -C \"{}\" branch --set-upstream-to=origin/{} {}", dir.display(), branch, branch).cyan());
+            logger::info(
+                &format!(
+                    "Remote branch 'origin/{}' exists. To link it, run: git -C {} branch --set-upstream-to=origin/{} {}",
+                    branch,
+                    dir.display(),
+                    branch,
+                    branch
+                ));
         }
     }
 
