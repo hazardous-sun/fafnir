@@ -11,5 +11,5 @@ ignore = "0.4.22"
 serde_json = "1.0.115"
 
 [[bin]]
-name = "collector"
+name = "fafnir"
 path = "src/main.rs"
