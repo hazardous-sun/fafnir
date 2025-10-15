@@ -1,8 +1,7 @@
-// src/cli.rs
 use clap::{Parser, Subcommand};
 use std::path::PathBuf;
 
-/// The top-level CLI structure.
+/// A structure to collect the CLI parameters and check which command should run.
 #[derive(Parser, Debug)]
 #[command(name = "collector", version, about, long_about = None)]
 pub struct Cli {
@@ -10,11 +9,13 @@ pub struct Cli {
     pub command: Commands,
 }
 
-/// An enum to hold all possible subcommands. For now, it's just 'collect'.
+/// An enum to hold all possible commands.
 #[derive(Subcommand, Debug)]
 pub enum Commands {
     /// Collects repository content into a single JSON file.
     Collect(CollectArgs),
+    /// Checks the status of all git repositories in one or more directories.
+    CheckRepos(CheckReposArgs),
 }
 
 /// Arguments specific to the 'collect' command.
@@ -35,4 +36,12 @@ pub struct CollectArgs {
     /// The root directory to start scanning from. Defaults to the CWD.
     #[arg(default_value = ".")]
     pub root: PathBuf,
+}
+
+/// Arguments specific to the 'check-repos' command.
+#[derive(Parser, Debug)]
+pub struct CheckReposArgs {
+    /// The parent directories to scan for git repositories.
+    #[arg(required = true, num_args = 1..)]
+    pub directories: Vec<PathBuf>,
 }
