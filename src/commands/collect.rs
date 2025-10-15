@@ -1,50 +1,28 @@
+// src/commands/collect.rs
+use crate::cli::CollectArgs; // Import the arguments struct
 use anyhow::{Context, Result};
-use clap::Parser;
 use ignore::{DirEntry, WalkBuilder};
 use serde_json::{Map, Value};
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::{Path};
 
-/// A structure to collect the parameters required for running the collector utility.
-#[derive(Parser, Debug)]
-#[command(version, about, long_about = None)]
-pub struct Cli {
-    /// The path to the output file. Defaults to `content.json`.
-    #[arg(default_value = "content.json")]
-    pub output_file: PathBuf,
-
-    /// Specific file or directory paths to ignore.
-    #[arg(long, short = 'i', value_name = "PATH")]
-    pub ignore: Vec<String>,
-
-    /// File or directory names to ignore globally, regardless of their path.
-    #[arg(long, value_name = "FILENAME")]
-    pub ignore_all: Vec<String>,
-
-    /// The root directory to start scanning from. Defaults to the CWD.
-    #[arg(default_value = ".")]
-    pub root: PathBuf,
-}
-
-pub fn run() -> Result<()> {
-    let config = Cli::parse();
-
-    // 1. Set up the directory walker with custom ignore rules
-    let mut walk_builder = WalkBuilder::new(&config.root);
+pub fn run(args: &CollectArgs) -> Result<()> {
+    // 1. Set up the directory walker using the provided arguments
+    let mut walk_builder = WalkBuilder::new(&args.root);
     walk_builder.add_custom_ignore_filename(".gitignore");
 
     // Add patterns from --ignore-all
-    for pattern in &config.ignore_all {
+    for pattern in &args.ignore_all {
         walk_builder.add_ignore(format!("**/{}", pattern));
     }
 
     // Add patterns from --ignore
-    for pattern in &config.ignore {
+    for pattern in &args.ignore {
         walk_builder.add_ignore(pattern);
     }
 
     // Always ignore the output file itself
-    if let Some(output_filename) = config.output_file.to_str() {
+    if let Some(output_filename) = args.output_file.to_str() {
         walk_builder.add_ignore(output_filename);
     }
 
@@ -54,22 +32,22 @@ pub fn run() -> Result<()> {
     for result in walk_builder.build() {
         let entry = result.context("Failed to process a directory entry")?;
         if entry.file_type().map_or(false, |ft| ft.is_file()) {
-            insert_file_content(&mut root_map, &entry, &config.root)?;
+            insert_file_content(&mut root_map, &entry, &args.root)?;
         }
     }
 
     let final_json = Value::Object(root_map);
 
     // 3. Write the JSON to the output file
-    let file = fs::File::create(&config.output_file)
-        .with_context(|| format!("Failed to create output file: {:?}", &config.output_file))?;
+    let file = fs::File::create(&args.output_file)
+        .with_context(|| format!("Failed to create output file: {:?}", &args.output_file))?;
 
     serde_json::to_writer_pretty(file, &final_json)
         .context("Failed to write JSON to output file")?;
 
     println!(
         "✅ Repository content successfully saved to {:?}",
-        &config.output_file
+        &args.output_file
     );
     Ok(())
 }
