@@ -1,4 +1,5 @@
 use crate::cli::CollectArgs;
+use crate::utils::logger;
 use anyhow::{Context, Result};
 use ignore::{DirEntry, WalkBuilder};
 use serde_json::{Map, Value};
@@ -44,10 +45,10 @@ pub fn run(args: &CollectArgs) -> Result<()> {
     serde_json::to_writer_pretty(file, &final_json)
         .context("Failed to write JSON to output file")?;
 
-    println!(
-        "✅ Repository content successfully saved to {:?}",
+    logger::info(&format!(
+        "Repository content successfully saved to {:?}",
         &args.output_file
-    );
+    ));
     Ok(())
 }
 
