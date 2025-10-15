@@ -1,10 +1,9 @@
-// src/commands/collect.rs
-use crate::cli::CollectArgs; // Import the arguments struct
+use crate::cli::CollectArgs;
 use anyhow::{Context, Result};
 use ignore::{DirEntry, WalkBuilder};
 use serde_json::{Map, Value};
 use std::fs;
-use std::path::{Path};
+use std::path::Path;
 
 pub fn run(args: &CollectArgs) -> Result<()> {
     // 1. Set up the directory walker using the provided arguments
