@@ -9,3 +9,7 @@ ignore = "0.4.23"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.145"
 anyhow = "1.0.100"
+
+[[bin]]
+name = "useful-tools"
+path = "src/main.rs"
