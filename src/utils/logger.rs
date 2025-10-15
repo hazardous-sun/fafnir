@@ -1,13 +1,13 @@
 use colored::Colorize;
 
 pub fn info(message: &str) {
-    println!("INFO: {}", message.cyan());
+    println!("{}: {}", "INFO".cyan(), message);
 }
 
-pub fn warn(message: &str) {
-    println!("WARNING: {}", message.yellow());
+pub fn warning(message: &str) {
+    println!("{}: {}", "WARNING".yellow(), message);
 }
 
 pub fn error(message: &str) {
-    println!("ERROR: {}", message.red());
+    println!("{}: {}", "ERROR".red(), message);
 }

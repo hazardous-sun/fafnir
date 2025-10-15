@@ -1,7 +1,6 @@
 use crate::cli::CheckReposArgs;
 use crate::utils::logger;
 use anyhow::{Context, Result};
-use colored::Colorize;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
@@ -35,7 +34,7 @@ pub fn run(args: &CheckReposArgs) -> Result<()> {
             let path = entry.path();
 
             if path.is_dir() {
-                logger::info(&format!("🔍 Checking {}", path.display()));
+                logger::info(&format!("Checking {}", path.display()));
                 // 3. Get directory status
                 match check_repo_status(&path)? {
                     Some(RepoStatus::Uncommitted) => uncommitted.push(path),
@@ -43,7 +42,7 @@ pub fn run(args: &CheckReposArgs) -> Result<()> {
                     Some(RepoStatus::NotPushed) => not_pushed.push(path),
                     Some(RepoStatus::Ok) => (),
                     None => {
-                        logger::warn(&format!("📁 Not a git repository: '{}'", path.display()));
+                        logger::warning(&format!("Not a git repository: '{}'", path.display()));
                     }
                 }
             }
@@ -117,14 +116,14 @@ fn print_report(
     not_pushed: &[PathBuf],
 ) -> Result<()> {
     if !uncommitted.is_empty() {
-        logger::warn("The following directories contain uncommitted changes:");
+        logger::warning("The following directories contain uncommitted changes:");
         for dir in uncommitted {
             println!("{}", dir.display().to_string());
         }
     }
 
     if !no_upstream.is_empty() {
-        logger::warn("The following directories do not have an upstream branch set:");
+        logger::warning("The following directories do not have an upstream branch set:");
         for dir in no_upstream {
             println!("{}", dir.display().to_string());
             let branch_output = Command::new("git")
@@ -147,9 +146,9 @@ fn print_report(
     }
 
     if !not_pushed.is_empty() {
-        println!("{}", "\n📤 The following directories contain changes that were committed but not yet pushed:".truecolor(135, 255, 135));
+        logger::info("The following directories contain changes that were committed but not yet pushed:");
         for dir in not_pushed {
-            println!("{}", dir.display().to_string().truecolor(135, 255, 135));
+            println!("{}", dir.display().to_string());
         }
     }
 
