@@ -1,4 +1,3 @@
-// src/main.rs
 mod cli;
 mod commands;
 
@@ -13,6 +12,9 @@ fn main() -> Result<()> {
     match &cli.command {
         Commands::Collect(args) => {
             commands::collect::run(args)?;
+        },
+        Commands::CheckRepos(args) => {
+            commands::check_repos::run(args)?;
         }
     }
 
