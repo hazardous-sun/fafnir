@@ -5,8 +5,13 @@ use std::path::PathBuf;
 #[derive(Parser, Debug)]
 #[command(name = "collector", version, about, long_about = None)]
 pub struct Cli {
+    /// The command to run.
     #[command(subcommand)]
     pub command: Commands,
+
+    /// Enables verbose output (debug logs).
+    #[arg(long, global = true, action = clap::ArgAction::SetTrue)]
+    pub verbose: bool,
 }
 
 /// An enum to hold all possible commands.

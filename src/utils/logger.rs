@@ -1,4 +1,11 @@
 use colored::Colorize;
+use std::sync::atomic::{AtomicBool, Ordering};
+
+static VERBOSE_ENABLED: AtomicBool = AtomicBool::new(false);
+
+pub fn init_verbose(enabled: bool) {
+    VERBOSE_ENABLED.store(enabled, Ordering::Relaxed);
+}
 
 pub fn info(message: &str) {
     println!("{}: {}", "INFO".cyan(), message);
@@ -13,5 +20,7 @@ pub fn error(message: &str) {
 }
 
 pub fn debug(message: &str) {
-    println!("{}: {}", "DEBUG".truecolor(135, 255, 135), message);
+    if VERBOSE_ENABLED.load(Ordering::Relaxed) {
+        println!("{}: {}", "DEBUG".truecolor(135, 255, 135), message);
+    }
 }
