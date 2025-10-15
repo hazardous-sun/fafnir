@@ -11,3 +11,7 @@ pub fn warning(message: &str) {
 pub fn error(message: &str) {
     println!("{}: {}", "ERROR".red(), message);
 }
+
+pub fn debug(message: &str) {
+    println!("{}: {}", "DEBUG".truecolor(135, 255, 135), message);
+}

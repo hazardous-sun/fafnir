@@ -34,7 +34,7 @@ pub fn run(args: &CheckReposArgs) -> Result<()> {
             let path = entry.path();
 
             if path.is_dir() {
-                logger::info(&format!("Checking {}", path.display()));
+                logger::debug(&format!("Checking {}", path.display()));
                 // 3. Get directory status
                 match check_repo_status(&path)? {
                     Some(RepoStatus::Uncommitted) => uncommitted.push(path),
@@ -116,14 +116,14 @@ fn print_report(
     not_pushed: &[PathBuf],
 ) -> Result<()> {
     if !uncommitted.is_empty() {
-        logger::warning("The following directories contain uncommitted changes:");
+        logger::info("The following directories contain uncommitted changes:");
         for dir in uncommitted {
             println!("{}", dir.display().to_string());
         }
     }
 
     if !no_upstream.is_empty() {
-        logger::warning("The following directories do not have an upstream branch set:");
+        logger::info("The following directories do not have an upstream branch set:");
         for dir in no_upstream {
             println!("{}", dir.display().to_string());
             let branch_output = Command::new("git")
