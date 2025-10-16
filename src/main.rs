@@ -20,7 +20,10 @@ fn main() -> Result<()> {
             commands::custom_git::check_repos::run(args)?;
         }
         Commands::PullRepos(args) => {
-            ()
+            commands::custom_git::pull_repos::run(args)?;
+        }
+        Commands::PushRepos(args) => {
+            commands::custom_git::push_repos::run(args)?;
         }
     }
 
