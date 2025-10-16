@@ -21,6 +21,9 @@ pub enum Commands {
     Collect(CollectArgs),
     /// Checks the status of all git repositories in one or more directories.
     CheckRepos(CheckReposArgs),
+    /// Pulls the latests changes in the current branch for all git repositories
+    /// in one or more directories.
+    PullRepos(CheckReposArgs),
 }
 
 /// Arguments specific to the 'collect' command.
