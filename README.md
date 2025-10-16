@@ -1,13 +1,14 @@
 # Fafnir
 
-`fafnir` is a command-line utility for developers, written in Rust. It provides a set of tools for managing Git
-repositories in bulk and collecting project source code.
+`fafnir` is a command-line utility for developers (mostly myself), written in Rust. It provides a set of tools for
+managing Git repositories in bulk and collecting project source code.
 
 This project is a Rust-based migration of the original Bash scripts found in
 the [useful-scripts](https://github.com/hazardous-sun/useful-scripts) repository. The goal is to replace the original
 scripts with a more robust, performant, and cross-platform compatible tool.
 
-⚠️ **Note:** This is a work in progress, and not all scripts from the original repository have been migrated yet.
+> [!NOTE]
+> This is a work in progress, and not all scripts from the original repository have been migrated yet.
 
 ---
 
@@ -44,20 +45,18 @@ You can run `fafnir --help` to see a full list of commands and options.
 Collects the contents of a directory (respecting `.gitignore` and other rules) into a single JSON file. This is useful
 for providing context to LLMs.
 
-**Command:** `fafnir collect [OPTIONS]`
+**Command:** `fafnir collect [OPTIONS] [OUTPUT_FILE] [ROOT]`
 
 **Options:**
 
-* `--output-file <PATH>`: The path to the output file. (Default: `content.json`)
-* `--root <PATH>`: The root directory to scan from. (Default: `.`)
 * `-i, --ignore <PATH>`: Specific file or directory paths to ignore.
 * `--ignore-all <FILENAME>`: File or directory *names* to ignore globally (e.g., `node_modules`).
 
 **Example:**
 
 ```bash
-# Scan the current directory and save to output.json, ignoring all 'node_modules' folders
-fafnir collect --output-file output.json --ignore-all node_modules
+# Scan the current directory, ignoring all 'node_modules' folders
+fafnir collect --ignore-all node_modules
 ```
 
 ---
