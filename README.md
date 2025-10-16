@@ -1,25 +1,25 @@
-# Fafnir
+# Fafnir 🐉
 
-`fafnir` is a command-line utility for developers (mostly myself), written in Rust. It provides a set of tools for
+`fafnir` is a command‑line utility for developers (mostly myself), written in Rust. It provides handy tools for
 managing Git repositories in bulk and collecting project source code.
 
-This project is a Rust-based migration of the original Bash scripts found in
-the [useful-scripts](https://github.com/hazardous-sun/useful-scripts) repository. The goal is to replace the original
-scripts with a more robust, performant, and cross-platform compatible tool.
+This project is a Rust‑based migration of the original Bash scripts found in the
+[useful-scripts](https://github.com/hazardous-sun/useful-scripts) repository. The goal is to replace the original
+scripts with a more robust️, performant, and cross‑platform tool.
 
 > [!NOTE]
-> This is a work in progress, and not all scripts from the original repository have been migrated yet.
+> 🛠️ This is a work in progress. Not all scripts from the original repository have been migrated yet.
 
 ---
 
-## Installation
+## Installation 🧰
 
 ### Prerequisites
 
-1. **Rust:** You must have the [Rust toolchain](https://rustup.rs/) (which includes `cargo`) installed.
-2. **Git:** The Git operations commands require `git` to be installed and available in your system's `PATH`.
+1. **Rust:** Install the [Rust toolchain](https://rustup.rs/) (includes `cargo`).
+2. **Git:** Git operations require `git` installed and available in your system `PATH`.
 
-### From Source
+### From Source 🏗️
 
 1. Clone this repository or download the source files.
 2. Navigate to the project's root directory:
@@ -31,26 +31,26 @@ scripts with a more robust, performant, and cross-platform compatible tool.
    cargo install --path .
    ```
 
-This command compiles the `fafnir` binary and places it in your Cargo bin directory (usually `~/.cargo/bin/`). Make sure
-this directory is in your shell's `PATH` to run the command from anywhere.
+This command compiles the `fafnir` binary and places it in your Cargo bin directory (usually `~/.cargo/bin/`).  
+Make sure this directory is in your shell's `PATH` to run the command from anywhere.
 
 ---
 
-## Usage
+## Usage 🚀
 
-You can run `fafnir --help` to see a full list of commands and options.
+Run `fafnir --help` to see the full list of commands and options.
 
-### Collect Repository Content
+### Collect Repository Content 📚
 
-Collects the contents of a directory (respecting `.gitignore` and other rules) into a single JSON file. This is useful
+Collect the contents of a directory (respecting `.gitignore` and other rules) into a single JSON file. This is useful
 for providing context to LLMs.
 
 **Command:** `fafnir collect [OPTIONS] [OUTPUT_FILE] [ROOT]`
 
 **Options:**
 
-* `-i, --ignore <PATH>`: Specific file or directory paths to ignore.
-* `--ignore-all <FILENAME>`: File or directory *names* to ignore globally (e.g., `node_modules`).
+- `-i, --ignore <PATH>` — Specific file or directory paths to ignore.
+- `--ignore-all <FILENAME>` — File or directory *names* to ignore globally (e.g., `node_modules`).
 
 **Example:**
 
@@ -61,61 +61,63 @@ fafnir collect --ignore-all node_modules
 
 ---
 
-### Batch Git Operations
+### Batch Git Operations 🧪
 
-These commands operate on a list of parent directories. `fafnir` will scan one level deep inside each provided
-directory, find all Git repositories, and perform an action.
+These commands operate on a list of parent directories. `fafnir` scans **one level deep** inside each provided
+directory, finds all Git repositories, and performs an action.
 
 Before running an action (`pull` or `push`), the tool checks the status of each repository. Actions are only performed
-on "clean" repos (no uncommitted changes, upstream is set, and no unpushed commits). A final report is printed
+on **clean** repos (no uncommitted changes, upstream is set, and no unpushed commits). A final report is printed
 summarizing the status of all other repos.
 
-#### Check Repos
+#### Check Repos 🔍
 
-Checks the status of all git repositories and reports on any that have uncommitted changes, no upstream branch, or
+Check the status of all Git repositories and report any with uncommitted changes, no upstream branch, or
 unpushed commits.
 
-**Command**: `fafnir check-repos <DIRECTORIES...>`
+**Command:** `fafnir check-repos <DIRECTORIES...>`
 
-**Example**:
+**Example:**
 
 ```bash
 # Check all repositories located inside ~/projects and ~/work
 fafnir check-repos ~/projects ~/work
 ```
 
-#### Pull Repos
+#### Pull Repos ⬇️
 
-Pulls the latest changes for all "clean" git repositories.
+Pull the latest changes for all **clean** Git repositories.
 
-**Command**: `fafnir pull-repos <DIRECTORIES...>`
+**Command:** `fafnir pull-repos <DIRECTORIES...>`
 
-**Example**:
+**Example:**
 
 ```bash
 # Pull updates for all clean repos in ~/projects
 fafnir pull-repos ~/projects
 ```
 
-#### Push Repos
+#### Push Repos ⬆️
 
-Pushes the latest changes for all "clean" git repositories.
+Push the latest changes for all **clean** Git repositories.
 
-**Command**: `fafnir push-repos <DIRECTORIES...>`
+**Command:** `fafnir push-repos <DIRECTORIES...>`
 
-**Example**:
+**Example:**
 
 ```bash
 # Push updates for all clean repos in ~/projects
 fafnir push-repos ~/projects
 ```
 
-## Migration Status
+---
 
-This table tracks the migration progress from the
-original [useful-scripts](https://github.com/hazardous-sun/useful-scripts) repository.
+## Migration Status 🗺️
 
-| Original Script               | Migrated Command     | Status              |                    
+Tracking migration progress from the original
+[useful-scripts](https://github.com/hazardous-sun/useful-scripts) repository.
+
+| Original Script               | Migrated Command     | Status              |
 |-------------------------------|----------------------|---------------------|
 | `collect_repo_content.sh`     | `fafnir collect`     | ✅ Migrated          |
 | `check-repos.sh`              | `fafnir check-repos` | ✅ Migrated          |
