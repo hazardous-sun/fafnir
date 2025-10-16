@@ -1,17 +1,10 @@
 use crate::cli::CheckReposArgs;
 use crate::utils::logger;
+use crate::commands::custom_git::utils::RepoStatus;
 use anyhow::{Context, Result};
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
-
-/// Represents the status of a Git repository.
-enum RepoStatus {
-    Uncommitted,
-    NoUpstream,
-    NotPushed,
-    Ok,
-}
 
 pub fn run(args: &CheckReposArgs) -> Result<()> {
     let mut uncommitted = Vec::new();
