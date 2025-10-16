@@ -32,21 +32,21 @@ pub enum Commands {
 /// Arguments specific to the 'collect' command.
 #[derive(Parser, Debug)]
 pub struct CollectArgs {
+    /// The root directory to start scanning from. Defaults to the CWD.
+    #[arg(long, short = 'p', default_value = ".")]
+    pub path: PathBuf,
+
     /// The path to the output file. Defaults to `content.json`.
-    #[arg(default_value = "content.json")]
+    #[arg(long, short = 'o', default_value = "content.json")]
     pub output_file: PathBuf,
 
     /// Specific file or directory paths to ignore.
-    #[arg(long, short = 'i', value_name = "PATH")]
+    #[arg(long, short = 'i', value_name = "PATH", num_args = 1..)]
     pub ignore: Vec<String>,
 
     /// File or directory names to ignore globally, regardless of their path.
-    #[arg(long, value_name = "FILENAME")]
+    #[arg(long, value_name = "FILENAME", num_args = 1..)]
     pub ignore_all: Vec<String>,
-
-    /// The root directory to start scanning from. Defaults to the CWD.
-    #[arg(default_value = ".")]
-    pub root: PathBuf,
 }
 
 /// Arguments specific to the `check-repos`, `pull-repos`, and `push-repos` commands.

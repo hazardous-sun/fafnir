@@ -1,30 +1,40 @@
 use crate::cli::CollectArgs;
 use crate::utils::logger;
 use anyhow::{Context, Result};
-use ignore::{DirEntry, WalkBuilder};
+use ignore::{overrides::OverrideBuilder, DirEntry, WalkBuilder};
 use serde_json::{Map, Value};
 use std::fs;
 use std::path::Path;
 
 pub fn run(args: &CollectArgs) -> Result<()> {
     // 1. Set up the directory walker using the provided arguments
-    let mut walk_builder = WalkBuilder::new(&args.root);
-    walk_builder.add_custom_ignore_filename(".gitignore");
+    let mut walk_builder = WalkBuilder::new(&args.path);
+
+    // Use an OverrideBuilder to add programmatic ignore patterns
+    let mut override_builder = OverrideBuilder::new(&args.path);
 
     // Add patterns from --ignore-all
     for pattern in &args.ignore_all {
-        walk_builder.add_ignore(format!("**/{}", pattern));
+        // '!' makes it an ignore rule, not a whitelist
+        override_builder.add(&format!("!**/{}", pattern))
+            .context(format!("Failed to add ignore-all pattern: {}", pattern))?;
     }
 
     // Add patterns from --ignore
     for pattern in &args.ignore {
-        walk_builder.add_ignore(pattern);
+        override_builder.add(&format!("!{}", pattern))
+            .context(format!("Failed to add ignore pattern: {}", pattern))?;
     }
 
     // Always ignore the output file itself
     if let Some(output_filename) = args.output_file.to_str() {
-        walk_builder.add_ignore(output_filename);
+        override_builder.add(&format!("!{}", output_filename))
+            .context(format!("Failed to ignore output file: {}", output_filename))?;
     }
+
+    // Build the override rules and apply them to the WalkBuilder
+    let overrides = override_builder.build()?;
+    walk_builder.overrides(overrides);
 
     // 2. Walk the directory and build the JSON structure
     let mut root_map = Map::new();
@@ -32,7 +42,7 @@ pub fn run(args: &CollectArgs) -> Result<()> {
     for result in walk_builder.build() {
         let entry = result.context("Failed to process a directory entry")?;
         if entry.file_type().map_or(false, |ft| ft.is_file()) {
-            insert_file_content(&mut root_map, &entry, &args.root)?;
+            insert_file_content(&mut root_map, &entry, &args.path)?;
         }
     }
 
