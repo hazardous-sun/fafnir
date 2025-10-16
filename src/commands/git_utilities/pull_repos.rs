@@ -1,10 +1,10 @@
 use std::path::PathBuf;
 use std::process::Command;
-use crate::cli::CheckReposArgs;
+use crate::cli::RemoteOperationArgs;
 use crate::commands::git_utilities::utils::run_with_action;
 use crate::utils::logger;
 
-pub fn run(args: &CheckReposArgs) -> Result<(), anyhow::Error> {
+pub fn run(args: &RemoteOperationArgs) -> Result<(), anyhow::Error> {
     run_with_action(args, on_ok_pull)
 }
 

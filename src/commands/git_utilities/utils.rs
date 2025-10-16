@@ -1,4 +1,4 @@
-use crate::cli::CheckReposArgs;
+use crate::cli::RemoteOperationArgs;
 use crate::utils::logger;
 use anyhow::{Context, Result};
 use std::fs;
@@ -13,7 +13,7 @@ pub enum RepoStatus {
     Ok,
 }
 
-pub fn run_with_action<F>(args: &CheckReposArgs, mut on_ok: F) -> anyhow::Result<(), anyhow::Error>
+pub fn run_with_action<F>(args: &RemoteOperationArgs, mut on_ok: F) -> anyhow::Result<(), anyhow::Error>
 where
     F: FnMut(PathBuf) -> Result<(), anyhow::Error>,
 {

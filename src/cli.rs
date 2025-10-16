@@ -20,13 +20,13 @@ pub enum Commands {
     /// Collects repository content into a single JSON file.
     Collect(CollectArgs),
     /// Checks the status of all git repositories in one or more directories.
-    CheckRepos(CheckReposArgs),
+    CheckRepos(RemoteOperationArgs),
     /// Pulls the latest's changes in the current branch for all git repositories
     /// in one or more directories.
-    PullRepos(CheckReposArgs),
+    PullRepos(RemoteOperationArgs),
     /// Pushes the latest's changes in the current branch for all git repositores
     /// in one or more directories.
-    PushRepos(CheckReposArgs),
+    PushRepos(RemoteOperationArgs),
 }
 
 /// Arguments specific to the 'collect' command.
@@ -49,10 +49,10 @@ pub struct CollectArgs {
     pub root: PathBuf,
 }
 
-/// Arguments specific to the 'check-repos' command.
+/// Arguments specific to the `check-repos`, `pull-repos`, and `push-repos` commands.
 #[derive(Parser, Debug)]
-pub struct CheckReposArgs {
-    /// The parent directories to scan for git repositories.
+pub struct RemoteOperationArgs {
+    /// The parent directories to run the remote operations.
     #[arg(required = true, num_args = 1..)]
     pub directories: Vec<PathBuf>,
 }
