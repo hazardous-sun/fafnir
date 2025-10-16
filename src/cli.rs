@@ -1,7 +1,7 @@
 use clap::{Parser, Subcommand};
 use std::path::PathBuf;
 
-/// A structure to collect the CLI parameters and check which command should run.
+/// A collection of handy command-line tools for developers.
 #[derive(Parser, Debug)]
 #[command(name = "collector", version, about, long_about = None)]
 pub struct Cli {
