@@ -11,10 +11,10 @@ pub fn run(args: &CheckReposArgs) -> Result<(), anyhow::Error> {
 fn on_ok_push(path: PathBuf) -> anyhow::Result<(), anyhow::Error> {
     logger::debug(&format!("Pushing to '{}'... ", path.display()));
 
-    let output = Command::new("git").arg("push").current_dir(path).output()?;
+    let output = Command::new("git").arg("push").current_dir(path.clone()).output()?;
 
     if !output.status.success() {
-        logger::error("Failed to push to the origin... ");
+        logger::error(&format!("Failed to push to origin in '{}'", path.display()));
     }
 
     Ok(())

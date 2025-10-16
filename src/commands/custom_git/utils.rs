@@ -37,7 +37,7 @@ where
             let path = entry.path();
 
             if path.is_dir() {
-                logger::debug(&format!("Checking {}", path.display()));
+                logger::debug(&format!("Checking '{}'", path.display()));
                 // 3. Get directory status
                 match check_repo_status(&path)? {
                     Some(RepoStatus::Uncommitted) => uncommitted.push(path),
