@@ -14,16 +14,16 @@ fn main() -> Result<()> {
     // Match the subcommand and call its run function
     match &cli.command {
         Commands::Collect(args) => {
-            commands::custom_git::collect::run(args)?;
+            commands::git_utilities::collect::run(args)?;
         }
         Commands::CheckRepos(args) => {
-            commands::custom_git::check_repos::run(args)?;
+            commands::git_utilities::check_repos::run(args)?;
         }
         Commands::PullRepos(args) => {
-            commands::custom_git::pull_repos::run(args)?;
+            commands::git_utilities::pull_repos::run(args)?;
         }
         Commands::PushRepos(args) => {
-            commands::custom_git::push_repos::run(args)?;
+            commands::git_utilities::push_repos::run(args)?;
         }
     }
 

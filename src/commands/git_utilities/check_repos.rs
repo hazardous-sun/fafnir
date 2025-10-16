@@ -1,5 +1,5 @@
 use crate::cli::CheckReposArgs;
-use crate::commands::custom_git::utils::run_with_action;
+use crate::commands::git_utilities::utils::run_with_action;
 use anyhow::Result;
 use std::path::PathBuf;
 

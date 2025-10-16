@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 use std::process::Command;
 use crate::cli::CheckReposArgs;
-use crate::commands::custom_git::utils::run_with_action;
+use crate::commands::git_utilities::utils::run_with_action;
 use crate::utils::logger;
 
 pub fn run(args: &CheckReposArgs) -> Result<(), anyhow::Error> {
