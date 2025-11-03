@@ -25,6 +25,9 @@ fn main() -> Result<()> {
         Commands::PushRepos(args) => {
             commands::git_utilities::push_repos::run(args)?;
         }
+        Commands::BulkRename(args) => {
+            commands::bulk_rename::run(args)?;
+        }
     }
 
     Ok(())
