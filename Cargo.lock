@@ -165,9 +165,11 @@ dependencies = [
  "anyhow",
  "clap",
  "colored",
+ "globset",
  "home",
  "ignore",
  "serde_json",
+ "walkdir",
 ]
 
 [[package]]
