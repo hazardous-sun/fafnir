@@ -27,6 +27,14 @@ pub enum Commands {
     /// Pushes the latest's changes in the current branch for all git repositores
     /// in one or more directories.
     PushRepos(RemoteOperationArgs),
+
+    /// Renames multiple files (and explicitly-passed directories) in bulk.
+    ///
+    /// Examples:
+    ///   fafnir bulk-rename "*.java" "{}.md"
+    ///   fafnir bulk-rename "*.feature" "test-file-{}.md"
+    ///   fafnir bulk-rename teste1.md teste2.md teste3.md "{}.go"
+    BulkRename(BulkRenameArgs),
 }
 
 /// Arguments specific to the 'collect' command.
@@ -55,4 +63,22 @@ pub struct RemoteOperationArgs {
     /// The parent directories to run the remote operations.
     #[arg(required = true, num_args = 1..)]
     pub directories: Vec<PathBuf>,
+}
+
+/// Arguments for `bulk-rename`.
+#[derive(Parser, Debug)]
+pub struct BulkRenameArgs {
+    /// One or more absolute/relative paths or glob patterns (e.g., *.java, src/*.md, /home/me/file*).
+    /// When using glob patterns, only files are matched. Directories are only renamed if passed explicitly.
+    #[arg(required = true, num_args = 1..)]
+    pub patterns: Vec<String>,
+
+    /// The expression used to build new names. Use '{}' for the original name *without* extension.
+    /// Examples: "{}.md", "test-file-{}.md"
+    #[arg(required = true)]
+    pub replacement: String,
+
+    /// Recursively search within directories inferred from the patterns.
+    #[arg(short = 'r', long = "recursive", action = clap::ArgAction::SetTrue)]
+    pub recursive: bool,
 }
