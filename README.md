@@ -127,6 +127,6 @@ Tracking migration progress from the original
 | `check-history.sh`            | -                    | ❌ Not Migrated      |
 | `list-authors.sh`             | -                    | ❌ Not Migrated      |
 | `apply-theme.sh`              | -                    | ❌ Not Migrated      |
-| `renamefiles.sh`              | -                    | ❌ Not Migrated      |
+| `renamefiles.sh`              | `fafnir bulk-rename` | ✅ Migrated          |
 | `reconnect-device.sh`         | -                    | ❌ Not Migrated      |
 | `install.sh` / `uninstall.sh` | `cargo install`      | 📦 Handled by Cargo |
