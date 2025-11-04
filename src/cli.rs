@@ -3,7 +3,7 @@ use std::path::PathBuf;
 
 /// A collection of handy command-line tools for developers.
 #[derive(Parser, Debug)]
-#[command(name = "collector", version, about, long_about = None)]
+#[command(name = "fafnir", version, about, long_about = None)]
 pub struct Cli {
     /// The command to run.
     #[command(subcommand)]
