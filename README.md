@@ -1,25 +1,18 @@
-# Fafnir 🐉
+# Fafnir
 
 `fafnir` is a command‑line utility for developers (mostly myself), written in Rust. It provides handy tools for
 managing Git repositories in bulk and collecting project source code.
 
-This project is a Rust‑based migration of the original Bash scripts found in the
-[useful-scripts](https://github.com/hazardous-sun/useful-scripts) repository. The goal is to replace the original
-scripts with a more robust️, performant, and cross‑platform tool.
-
-> [!NOTE]
-> 🛠️ This is a work in progress. Not all scripts from the original repository have been migrated yet.
-
 ---
 
-## Installation 🧰
+## Installation
 
 ### Prerequisites
 
 1. **Rust:** Install the [Rust toolchain](https://rustup.rs/) (includes `cargo`).
 2. **Git:** Git operations require `git` installed and available in your system `PATH`.
 
-### From Source 🏗️
+### From Source
 
 1. Clone this repository or download the source files.
 2. Navigate to the project's root directory:
@@ -36,11 +29,11 @@ Make sure this directory is in your shell's `PATH` to run the command from anywh
 
 ---
 
-## Usage 🚀
+## Usage
 
 Run `fafnir --help` to see the full list of commands and options.
 
-### Collect Repository Content 📚
+### Collect Repository Content
 
 Collect the contents of a directory (respecting `.gitignore` and other rules) into a single JSON file. This is useful
 for providing context to LLMs.
@@ -61,7 +54,7 @@ fafnir collect --ignore-all node_modules
 
 ---
 
-### Batch Git Operations 🧪
+### Batch Git Operations
 
 These commands operate on a list of parent directories. `fafnir` scans **one level deep** inside each provided
 directory, finds all Git repositories, and performs an action.
@@ -70,7 +63,7 @@ Before running an action (`pull` or `push`), the tool checks the status of each 
 on **clean** repos (no uncommitted changes, upstream is set, and no unpushed commits). A final report is printed
 summarizing the status of all other repos.
 
-#### Check Repos 🔍
+#### Check Repos
 
 Check the status of all Git repositories and report any with uncommitted changes, no upstream branch, or
 unpushed commits.
@@ -84,7 +77,7 @@ unpushed commits.
 fafnir check-repos ~/projects ~/work
 ```
 
-#### Pull Repos ⬇️
+#### Pull Repos
 
 Pull the latest changes for all **clean** Git repositories.
 
@@ -97,7 +90,7 @@ Pull the latest changes for all **clean** Git repositories.
 fafnir pull-repos ~/projects
 ```
 
-#### Push Repos ⬆️
+#### Push Repos
 
 Push the latest changes for all **clean** Git repositories.
 
@@ -109,24 +102,3 @@ Push the latest changes for all **clean** Git repositories.
 # Push updates for all clean repos in ~/projects
 fafnir push-repos ~/projects
 ```
-
----
-
-## Migration Status 🗺️
-
-Tracking migration progress from the original
-[useful-scripts](https://github.com/hazardous-sun/useful-scripts) repository.
-
-| Original Script               | Migrated Command     | Status              |
-|-------------------------------|----------------------|---------------------|
-| `collect_repo_content.sh`     | `fafnir collect`     | ✅ Migrated          |
-| `check-repos.sh`              | `fafnir check-repos` | ✅ Migrated          |
-| `pull-repos.sh`               | `fafnir pull-repos`  | ✅ Migrated          |
-| `push-repos.sh`               | `fafnir push-repos`  | ✅ Migrated          |
-| `adjust-git-emails.sh`        | -                    | ❌ Not Migrated      |
-| `check-history.sh`            | -                    | ❌ Not Migrated      |
-| `list-authors.sh`             | -                    | ❌ Not Migrated      |
-| `apply-theme.sh`              | -                    | ❌ Not Migrated      |
-| `renamefiles.sh`              | `fafnir bulk-rename` | ✅ Migrated          |
-| `reconnect-device.sh`         | -                    | ❌ Not Migrated      |
-| `install.sh` / `uninstall.sh` | `cargo install`      | 📦 Handled by Cargo |
